@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviour
 {
     public Player player;
-    public Asteroid asteroidPrefab;
+    public Asteroid[] asteroidPrefabs;
     public ParticleSystem explosionEffect;
     public GameObject gameOverUI;
 
     public int score = 0;
     public int lives = 3;
+    
 
     public int asteroidsPerWave = 3;
     public float spawnMargin = 1f;
@@ -101,13 +102,14 @@ public class Game : MonoBehaviour
                 
             }
 
-            
+            Asteroid prefab = asteroidPrefabs[Random.Range(0, asteroidPrefabs.Length - 1)];
+
             //create the instance from the prefab
-            Asteroid newAsteroid = Instantiate(asteroidPrefab);
+            Asteroid newAsteroid = Instantiate(prefab);
             newAsteroid.transform.position = spawnPoint;
-            
-            //add a force in the defined trajectory
-            newAsteroid.SetTrajectory(Random.insideUnitCircle);
+
+            //add a force in the defined trajectory, at the speed determined by the asteroid prefab
+            newAsteroid.Push(Random.insideUnitCircle, newAsteroid.movementSpeed);
             
         }
     }
@@ -122,12 +124,12 @@ public class Game : MonoBehaviour
         explosionEffect.Play();
 
         //score based on size
-        if (asteroid.size < 0.7f)
+        if (asteroid.size <= 1)
         {
             score += 100; // small asteroid
             audioSource.PlayOneShot(smallExplosionSound, 1);
         }
-        else if (asteroid.size < 1.4f)
+        else if (asteroid.size == 2)
         {
             score += 50; // medium asteroid
             audioSource.PlayOneShot(mediumExplosionSound, 1);

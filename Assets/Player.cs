@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis(HORIZONTAL_AXIS);
         float verticalInput = Input.GetAxis(VERTICAL_AXIS);
 
-        //phisics operations have to be multiplied by Time.deltaTime to be framerate independent
+        //physics operations have to be multiplied by Time.deltaTime to be framerate independent
         rb.AddTorque(rotationSpeed * -horizontalInput * Time.deltaTime);
 
         if (verticalInput > 0)
